@@ -1,1 +1,23 @@
-import f from"node:fs";let w,T,D,F,G,{MAKEFUN_INPUT_DIR:I,MAKEFUN_OUTPUT_DIR:O}=process.env;function B(o,s){let q=[s].flat(),r=[];q.map(x=>r[x]="");for(let x of q)for(let j=4;j--;){let n=x+D[j];if(T[n]=="#"||o&&o.has(n)||r[n]!=null)continue;r[n]=r[x]+"udlr"[j];q.push(n)}return r}function S(b0,s){let a=B(0,G),H=b=>b.reduce((t,x)=>t+a[x].length,0),M={},K=[],m=0;K[H(b0)]=[[b0,s,"",0]];for(;;){while(!K[m]?.length)if(++m>999)return;let[b,p,v,g]=K[m].pop();if(!H(b))return[v,p];let o=new Set(b),r=B(o,p);for(let u of b)for(let j=4;j--;){let e=u-D[j],t=u+D[j];if(!F(t)||o.has(t)||r[e]==null||a[t]==null)continue;let n=b.map(x=>x^u?x:t);n.sort();let y=g+1,z=n+"/"+u;if(M[z]<=y)continue;M[z]=y;(K[y+H(n)]??=[]).push([n,u,v+r[e]+"udlr"[j],y]);}}}function L(t){w=t.search(/\n/);D=[-w,w,-1,1];T=t.replace(/\n/g,"");let Gl=[],b=[],p;[...T].forEach((c,i)=>{if(c>"("&&c<"/")Gl.push(i);if(c=="$"||c=="*")b.push(i);});p=T.search(/[@+]/);let v="",cp=p,cb=new Set(b);for(let dr of[7,9])for(let x=0;++x<w-1;)if(T[dr*w+x]!="#"){let e2=8*w+x,st=e2-cb.has(e2);F=c=>T[c]!="#"&&(c/w|0)-dr+(9-dr?6:1)>>>0<8&&c%w-x-1+x%7>>>0<6;let rb=b.filter(F);G=Gl.filter(F);v+=B(cb,cp)[st];let sm=S(rb,cp=st);rb.forEach(u=>cb.delete(u));G.forEach(u=>cb.add(u));cp=sm[1];v+=sm[0];}return v;}for(let k=0;k++<5;){let m=L(f.readFileSync(I+"/i00"+k+"/level.txt")+""),o=O+"/i00"+k;f.mkdirSync(o,{recursive:!0});f.writeFileSync(o+"/solution.txt",m)}
+f=require('fs')
+F=(u,o,c,e,f)=>{S[0]=b=u;s=1;e[u]=c;f&&(W[u]='');while(s){g=S[--s];g<b&&(b=g);for(x=4;x--;){j=g+D[x];if(t[j]!='#'&&!o[j]&&e[j]!=c){e[j]=c;f&&(W[j]=W[g]+'udlr'[x]);S[s++]=j}}}return b}
+Y=(a,j)=>{for(b of a){k=((b%P)/7|0)*2+(b/P>8);(R[k]=R[k]||[[],[]])[j].push(b)}}
+Z=(B,G)=>{Q=[[B,-1,U,'']];o={};o[F(U,O,++C,E,0)+','+B]=1;p=0;for(h=0;!p&&h<Q.length;h++){u=Q[h][0];for(a of u)O[a]=1;F(Q[h][2],O,++C,A,1);e=C;for(i in u){a=u[i];for(k=4;k--;){d=D[k];y=a+d;q=a-d;if(A[q]!=e||O[y]||!V[y])continue;O[a]=0;O[y]=1;z=W[q];T=u.slice();T[i]=y;T.sort((a,c)=>a-c);l=F(a,O,++C,E,0);N=l+','+T;O[y]=0;O[a]=1;if(o[N])continue;o[N]=1;Q.push([T,h,a,z+'UDLR'[k]]);if(T.every(b=>G.includes(b))){p=Q.length;break}}if(p)break}for(a of u)O[a]=0}if(!p)return'';m='';h=p-1;while(h>0){m=Q[h][3]+m;h=Q[h][1]}U=Q[p-1][2];return m}
+for(n=1;n<6;n++){
+t=f.readFileSync('/input/i00'+n+'/level.txt')+''
+P=t.indexOf('\n')+1
+D=[-P,P,-1,1]
+O=[];V=[];A=[];E=[];W=[];S=[];C=0
+G=[];X=[];U=0
+i=0;for(c of t){if('.+*'.includes(c))G.push(i);if(c=='$'||c=='*')X.push(i);if(c=='@'||c=='+')U=i;i++}
+q=[...G]
+for(g of G)V[g]=1
+for(i=0;i<q.length;i++){for(d of D){y=q[i]-d;if(t[y]!='#'&&t[y-d]!='#'&&!V[y]){V[y]=1;q.push(y)}}}
+R=[]
+Y(X,0);Y(G,1)
+for(b of X)O[b]=1
+M=''
+v='/output/i00'+n
+for(r of R){M+=Z(r[0],r[1]);for(g of r[1])O[g]=1}
+f.mkdirSync(v,{recursive:true})
+f.writeFileSync(v+'/solution.txt',M)
+}
